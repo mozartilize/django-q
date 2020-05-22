@@ -595,7 +595,7 @@ def scheduler(broker=None):
                 q_options["broker"] = broker
                 q_options["group"] = q_options.get("group", s.name or s.id)
                 kwargs["q_options"] = q_options
-                s.task = django_q.tasks.async_task(s.func, *args, **kwargs)
+                s.task = django_q.tasks.async_task(s.func, *args, **kwargs)['id']
                 # log it
                 if not s.task:
                     logger.error(

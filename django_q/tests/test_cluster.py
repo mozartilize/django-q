@@ -83,7 +83,7 @@ def test_sentinel():
 def test_cluster(broker):
     broker.list_key = 'cluster_test:q'
     broker.delete_queue()
-    task = async_task('django_q.tests.tasks.count_letters', DEFAULT_WORDLIST, broker=broker)
+    task = async_task('django_q.tests.tasks.count_letters', DEFAULT_WORDLIST, broker=broker)['id']
     assert broker.queue_size() == 1
     task_queue = Queue()
     assert task_queue.qsize() == 0
@@ -114,28 +114,28 @@ def test_enqueue(broker, admin_user):
     broker.list_key = 'cluster_test:q'
     broker.delete_queue()
     a = async_task('django_q.tests.tasks.count_letters', DEFAULT_WORDLIST, hook='django_q.tests.test_cluster.assert_result',
-                   broker=broker)
+                   broker=broker)['id']
     b = async_task('django_q.tests.tasks.count_letters2', WordClass(), hook='django_q.tests.test_cluster.assert_result',
-                   broker=broker)
+                   broker=broker)['id']
     # unknown argument
     c = async_task('django_q.tests.tasks.count_letters', DEFAULT_WORDLIST, 'oneargumentoomany',
-                   hook='django_q.tests.test_cluster.assert_bad_result', broker=broker)
+                   hook='django_q.tests.test_cluster.assert_bad_result', broker=broker)['id']
     # unknown function
     d = async_task('django_q.tests.tasks.does_not_exist', WordClass(), hook='django_q.tests.test_cluster.assert_bad_result',
-                   broker=broker)
+                   broker=broker)['id']
     # function without result
-    e = async_task('django_q.tests.tasks.countdown', 100000, broker=broker)
+    e = async_task('django_q.tests.tasks.countdown', 100000, broker=broker)['id']
     # function as instance
-    f = async_task(multiply, 753, 2, hook=assert_result, broker=broker)
+    f = async_task(multiply, 753, 2, hook=assert_result, broker=broker)['id']
     # model as argument
-    g = async_task('django_q.tests.tasks.get_task_name', Task(name='John'), broker=broker)
+    g = async_task('django_q.tests.tasks.get_task_name', Task(name='John'), broker=broker)['id']
     # args,kwargs, group and broken hook
-    h = async_task('django_q.tests.tasks.word_multiply', 2, word='django', hook='fail.me', broker=broker)
+    h = async_task('django_q.tests.tasks.word_multiply', 2, word='django', hook='fail.me', broker=broker)['id']
     # args unpickle test
-    j = async_task('django_q.tests.tasks.get_user_id', admin_user, broker=broker, group='test_j')
+    j = async_task('django_q.tests.tasks.get_user_id', admin_user, broker=broker, group='test_j')['id']
     # q_options and save opt_out test
     k = async_task('django_q.tests.tasks.get_user_id', admin_user,
-                   q_options={'broker': broker, 'group': 'test_k', 'save': False, 'timeout': 90})
+                   q_options={'broker': broker, 'group': 'test_k', 'save': False, 'timeout': 90})['id']
     # check if everything has a task id
     assert isinstance(a, str)
     assert isinstance(b, str)

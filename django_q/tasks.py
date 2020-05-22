@@ -74,7 +74,7 @@ def async_task(func, *args, **kwargs):
     enqueue_id = broker.enqueue(pack)
     logger.info(f"Enqueued {enqueue_id}")
     logger.debug(f"Pushed {tag}")
-    return task["id"]
+    return task
 
 
 def schedule(func, *args, **kwargs):

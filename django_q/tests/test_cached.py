@@ -22,7 +22,8 @@ def test_cached(broker):
     broker.cache.clear()
     group = 'cache_test'
     # queue the tests
-    task_id = async_task('math.copysign', 1, -1, cached=True, broker=broker)
+    task = async_task('math.copysign', 1, -1, cached=True, broker=broker)
+    task_id = task['id']
     async_task('math.copysign', 1, -1, cached=True, broker=broker, group=group)
     async_task('math.copysign', 1, -1, cached=True, broker=broker, group=group)
     async_task('math.copysign', 1, -1, cached=True, broker=broker, group=group)
